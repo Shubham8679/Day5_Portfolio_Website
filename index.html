@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ dropdownOpen: false, darkMode: localStorage.getItem('theme') === 'dark' }"
+    :class="{ 'dark': darkMode }">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shubham Chaugule Portfolio</title>
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="icon" href="favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_TRACKING_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'YOUR_GA_TRACKING_ID'); // Replace with your actual Google Analytics Tracking ID
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.16.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            plugins: [require('daisyui')],
+        }
+    </script>
+
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        /* For WebKit browsers (Chrome, Edge, Safari) */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #4f46e5, #9333ea);
+            /* Indigo to purple */
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #4338ca, #7e22ce);
+            /* Darker gradient on hover */
+        }
+
+        /* Dark mode styles */
+        body.dark {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+
+        body.dark .bg-black {
+            background-color: #2d3748;
+        }
+
+        body.dark .text-white {
+            color: #e2e8f0;
+        }
+
+        body.dark .bg-gray-100 {
+            background-color: #2d3748;
+        }
+
+        body.dark .bg-white {
+            background-color: #4a5568;
+        }
+
+        body.dark .text-gray-700 {
+            color: #cbd5e0;
+        }
+
+        body.dark .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        /* For WebKit browsers (Chrome, Edge, Safari) */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #4f46e5, #9333ea);
+            /* Indigo to purple */
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #4338ca, #7e22ce);
+            /* Darker gradient on hover */
+        }
+    </style>
+</head>
+
+<body class="bg-[#12df9b] font-sans" x-data="{ lastVisited: localStorage.getItem('lastVisitedSection') || 'home' }"
+    x-init="() => {
+        const sections = ['home', 'about', 'achievements', 'goals', 'personal-section', 'contact'];
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    localStorage.setItem('lastVisitedSection', entry.target.id);
+                    lastVisited = entry.target.id;
+                }
+            });
+        }, { threshold: 0.5 }); // Adjust threshold as needed
+
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+    }">
+
+    <div id="loader" class="fixed inset-0 bg-black flex items-center justify-center z-50">
+        <div class="w-12 h-12 border-4 border-white border-t-cyan-400 rounded-full animate-spin"></div>
+    </div>
+
+    <div id="cookie-banner"
+        class="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 flex items-center justify-between z-50 shadow-lg"
+        x-data="{ showCookieBanner: !localStorage.getItem('cookieConsent') }" x-show="showCookieBanner">
+        <p class="text-sm">
+            This website uses cookies to ensure you get the best experience. By continuing to use our site, you agree to
+            our <a href="#" class="underline">privacy policy</a>.
+        </p>
+        <button @click="localStorage.setItem('cookieConsent', 'true'); showCookieBanner = false"
+            class="ml-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition duration-300">
+            Got it!
+        </button>
+    </div>
+
+   <nav class="bg-black bg-opacity-70 px-6 py-4 shadow-lg relative z-10 navbar">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-cyan-400 text-2xl font-bold">SJCEM</div>
+
+            <label class="swap swap-rotate ml-auto mr-4">
+                <input type="checkbox" @change="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'dark' : 'light')" :checked="darkMode" />
+                <svg class="swap-on fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M21.64,13a1,1,0,0,1-.92-.59,1,1,0,0,0-.79-.59,1,1,0,0,1-.83-.44A9.1,9.1,0,0,1,12,2.83h0A9.26,9.26,0,0,0,2.83,12a9.08,9.08,0,0,0,8.5,9.09A1,1,0,0,1,12,22a1,1,0,0,0,.75-.38l.61-.62a1,1,0,0,1,.87-.36h0a1,1,0,0,1,.87-.38A9.1,9.1,0,0,1,21.64,13Z" />
+                </svg>
+                <svg class="swap-off fill-current w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M21.64,13a1,1,0,0,1-.92-.59,1,1,0,0,0-.79-.59,1,1,0,0,1-.83-.44A9.1,9.1,0,0,1,12,2.83h0A9.26,9.26,0,0,0,2.83,12a9.08,9.08,0,0,0,8.5,9.09A1,1,0,0,1,12,22a1,1,0,0,0,.75-.38l.61-.62a1,1,0,0,1-.87-.36h0a1,1,0,0,1-.87-.38A9.1,9.1,0,0,1,21.64,13Z" />
+                </svg>
+            </label>
+
+            <button id="menu-btn" class="text-white sm:hidden focus:outline-none text-2xl">
+                ☰
+            </button>
+
+            <ul id="menu"
+                class="hidden sm:flex flex-col sm:flex-row sm:items-center absolute sm:static top-full left-0 w-full sm:w-auto bg-black sm:bg-transparent bg-opacity-90 sm:bg-opacity-0 space-y-2 sm:space-y-0 sm:space-x-4 mt-4 sm:mt-0 px-6 sm:px-0 py-4 sm:py-0 rounded sm:rounded-none">
+                <li><a href="#home" class="text-white px-4 py-2 hover:bg-pink-500 rounded transition"
+                        :class="{ 'border-b-2 border-pink-500': lastVisited === 'home' }"
+                        @click="localStorage.setItem('lastVisitedSection', 'home')"><i
+                            class="fa-solid fa-house"></i>Home</a></li>
+                <li><a href="#about" class="text-white px-4 py-2 hover:bg-pink-500 rounded transition"
+                        :class="{ 'border-b-2 border-pink-500': lastVisited === 'about' }"
+                        @click="localStorage.setItem('lastVisitedSection', 'about')"><i
+                            class="fa-regular fa-address-card"></i>About Me</a></li>
+
+                <li class="relative group">
+                    <button class="text-white px-4 py-2 hover:bg-pink-500 rounded transition"><i
+                                class="fa-solid fa-trophy"></i>Achievements</button>
+                    <ul
+                        class="hidden group-hover:block absolute top-full left-0 w-48 bg-yellow-500 text-black font-semibold rounded shadow-lg z-50">
+                        <li><a href="#achievements" class="block px-4 py-2 hover:bg-lime-400 transition"
+                                @click="localStorage.setItem('lastVisitedSection', 'achievements')">Education</a></li>
+                        <li><a href="#achievements" class="block px-4 py-2 hover:bg-lime-400 transition"
+                                @click="localStorage.setItem('lastVisitedSection', 'achievements')">Sports</a></li>
+                        <li><a href="#achievements" class="block px-4 py-2 hover:bg-lime-400 transition"
+                                @click="localStorage.setItem('lastVisitedSection', 'achievements')">Social Media</a>
+                        </li>
+                        <li><a href="#achievements" class="block px-4 py-2 hover:bg-lime-400 transition"
+                                @click="localStorage.setItem('lastVisitedSection', 'achievements')">Online Game</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="relative group">
+                    <button class="text-white px-4 py-2 hover:bg-pink-500 rounded transition">
+                        <i class="fa-brands fa-github"></i> GitHub Projects
+                    </button>
+                    <ul class="hidden group-hover:block absolute top-full left-0 w-48 bg-yellow-500 text-black font-semibold rounded shadow-lg z-50">
+                        <li><a href="https://shubham8679.github.io/internship_sjcem/" class="block px-4 py-2 hover:bg-lime-400 transition" @click="localStorage.setItem('lastVisitedSection', 'day1-project')">Day 1 Project</a></li>
+                        <li><a href="https://shubham8679.github.io/Portfolio-Website-Using-TailWind-Css-json/" class="block px-4 py-2 hover:bg-lime-400 transition" @click="localStorage.setItem('lastVisitedSection', 'day2-project')">Day 2 Project</a></li>
+                        <li><a href="https://shubham8679.github.io/Day-3-PortFolio-WebSite-shubham_chaugule/" class="block px-4 py-2 hover:bg-lime-400 transition" @click="localStorage.setItem('lastVisitedSection', 'day3-project')">Day 3 Project</a></li>
+                        <li><a href="https://shubham8679.github.io/Day_4-Portfolio_website_Update/" class="block px-4 py-2 hover:bg-lime-400 transition" @click="localStorage.setItem('lastVisitedSection', 'day4-project')">Day 4 Project</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#goals" class="text-white px-4 py-2 hover:bg-pink-500 rounded transition"
+                        :class="{ 'border-b-2 border-pink-500': lastVisited === 'goals' }"
+                        @click="localStorage.setItem('lastVisitedSection', 'goals')"><i
+                            class="fa-solid fa-hands-holding"></i>Future Goal</a></li>
+                <li><a href="#personal-section" class="text-white px-4 py-2 hover:bg-pink-500 rounded transition"
+                        :class="{ 'border-b-2 border-pink-500': lastVisited === 'personal-section' }"
+                        @click="localStorage.setItem('lastVisitedSection', 'personal-section')"><i
+                            class="fa-solid fa-person"></i>Personal Side</a></li>
+                <li><a href="shopi.html" class="text-white px-4 py-2 hover:bg-pink-500 rounded transition"
+                        :class="{ 'border-b-2 border-pink-500': lastVisited === 'shopping-cart' }"
+                        @click="localStorage.setItem('lastVisitedSection', 'shopping-cart')"><i
+                            class="fa-solid fa-cart-shopping"></i>Shopping Cart</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const menu = document.getElementById('menu');
+
+        menuBtn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
+
+    <main>
+        <section id="home"
+            class="w-full py-10 text-center bg-black bg-opacity-50 backdrop-blur-md shadow-md semantic-section">
+            <div class="text-4xl sm:text-5xl md:text-6xl font-extrabold">
+                <span class="text-white">I am a</span>
+                <span id="typing" class="text-cyan-300 border-r-4 border-yellow-300 px-2 animate-pulse"></span>
+            </div>
+        </section>
+
+        <section
+            class="w-screen flex items-center justify-center px-4 py-10 bg-black bg-opacity-40 backdrop-blur-md semantic-section">
+            <div class="max-w-4xl w-full flex flex-col items-center text-center space-y-6">
+                <h1 class="text-4xl md:text-5xl font-bold">
+                    Hi, I'm <span class="text-yellow-300">Shubham Chaugule</span> 👋
+                </h1>
+                <p class="text-white text-lg max-w-2xl bg-black bg-opacity-50 px-4 py-2 rounded-lg shadow-md">
+                    Welcome to my personal portfolio. I'm excited to share my journey, projects, and passion with you.
+                </p>
+
+                <img src="pic1.jpg" alt="Shubham Chaugule"
+                    class="w-36 h-36 sm:w-44 sm:h-44 object-cover rounded-full shadow-lg border-4 border-cyan-400" />
+
+                <video class="w-full max-w-md rounded-xl shadow-xl ring-2 ring-pink-300" controls>
+                    <source src="intr1.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </section>
+
+        <script>
+            const texts = ["Web Developer", "UI Designer", "Freelancer"];
+            let i = 0, j = 0, current = "", isDeleting = false;
+
+            function type() {
+                if (i < texts.length) {
+                    if (!isDeleting && j <= texts[i].length) {
+                        current = texts[i].substring(0, j++);
+                    } else if (isDeleting && j >= 0) {
+                        current = texts[i].substring(0, j--);
+                    }
+
+                    document.getElementById("typing").textContent = current;
+
+                    let typingSpeed = isDeleting ? 100 : 150;
+                    if (!isDeleting && j === texts[i].length) {
+                        isDeleting = true;
+                        setTimeout(type, 1000);
+                        return;
+                    } else if (isDeleting && j === 0) {
+                        isDeleting = false;
+                        i = (i + 1) % texts.length;
+                        setTimeout(type, 500);
+                        return;
+                    }
+
+                    setTimeout(type, typingSpeed);
+                }
+            }
+            type();
+        </script>
+
+        <!-- <section id="about" class="w-full py-12 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center semantic-section">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
+                <div class="flex-shrink-0 w-full md:w-1/2">
+                    <img src="pic2.jpg" alt="About Me" class="w-full h-auto rounded-lg shadow-md" />
+                </div>
+
+                <article class="w-full md:w-1/2">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-blue-700">About Me</h2>
+                    <p class="text-blue-900 text-base sm:text-lg mb-6">
+                        I am Shubham Chandrakant Chaugule. I am pursuing Electronic and Computer Science Engineering at
+                        St. John College Of Engineering and Management.
+                    </p>
+
+                    <div class="tabs tabs-boxed mb-6">
+                        <a role="tab" class="tab tab-lg" :class="{ 'tab-active': activeTab === 'skills' }"
+                            @click="activeTab = 'skills'; localStorage.setItem('aboutTab', 'skills')">Name/Location</a>
+                        <a role="tab" class="tab tab-lg" :class="{ 'tab-active': activeTab === 'experience' }"
+                            @click="activeTab = 'experience'; localStorage.setItem('aboutTab', 'experience')">Education</a>
+                        <a role="tab" class="tab tab-lg" :class="{ 'tab-active': activeTab === 'education' }"
+                            @click="activeTab = 'education'; localStorage.setItem('aboutTab', 'education')">Language
+                            Known</a>
+                    </div>
+
+                    <div x-data="{ activeTab: localStorage.getItem('aboutTab') || 'skills' }">
+                        <div x-show="activeTab === 'skills'" class="tab-content pt-4">
+                            <ul class="list-disc list-inside space-y-2 text-blue-900">
+                                <li><span class="font-semibold">Name:</span> Shubham Chandrakant Chaugule</li>
+                                <li><span class="font-semibold">Location:</span> Vasai-Nallasopara</li>
+                                <li><span class="font-semibold">Landmark:</span> Seth Vidyamandir</li>
+                            </ul>
+                        </div>
+
+                        <div x-show="activeTab === 'experience'" class="tab-content pt-4">
+                            <ul class="list-disc list-inside space-y-2 text-blue-900">
+                                <li><span class="font-semibold">HSC:</span> VIVA College</li>
+                                <li><span class="font-semibold">Software Engineering Diploma:</span> I-Tech Computer
+                                    Education</li>
+                                <li><span class="font-semibold">Electronics and Computer Science Engineering:</span> St.
+                                    John College Of Engineering and Management</li>
+                            </ul>
+                        </div>
+
+                        <div x-show="activeTab === 'education'" class="tab-content pt-4">
+                            <ul class="list-disc list-inside space-y-2 text-blue-900">
+                                <li><span class="font-semibold">English:</span> Advanced</li>
+                                <li><span class="font-semibold">Marathi:</span> Advanced</li>
+                                <li><span class="font-semibold">Hindi:</span> Advanced</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section> -->
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Me - Tabs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-6">
+
+  <div id="about" class="max-w-6xl mx-auto bg-white shadow-lg rounded-xl p-6">
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+      
+      <!-- Left Column (Image) -->
+      <div class="text-center">
+        <img src="pic2.jpg" alt="About Image" class="rounded-lg w-full max-w-sm mx-auto shadow-md">
+      </div>
+
+      <!-- Right Column (Content) -->
+      <div>
+        <h1 class="text-3xl font-bold mb-4 text-cyan-600">About Me</h1>
+        <p class="mb-6">
+          I am Shubham Chandrakant Chaugule. I am pursuing Electronic and Computer Science Engineering at St. John College of Engineering and Management.
+        </p>
+
+        <!-- Tab Titles -->
+        <div class="flex space-x-4 mb-4 border-b border-gray-300">
+          <button class="tab-links active-tab px-3 py-2 font-medium text-cyan-600 border-b-2 border-cyan-600" onclick="openTab('skills', event)">Name/Location</button>
+          <button class="tab-links px-3 py-2 font-medium hover:text-cyan-600" onclick="openTab('experience', event)">Education</button>
+          <button class="tab-links px-3 py-2 font-medium hover:text-cyan-600" onclick="openTab('education', event)">Language Known</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="skills" class="tab-content block">
+          <ul class="list-disc pl-5 space-y-2">
+            <li><strong>Name:</strong> Shubham Chandrakant Chaugule</li>
+            <li><strong>Location:</strong> Vasai-Nallasopara</li>
+            <li><strong>Landmark:</strong> Seth Vidyamandir</li>
+          </ul>
+        </div>
+
+        <div id="experience" class="tab-content hidden">
+          <ul class="list-disc pl-5 space-y-2">
+            <li><strong>HSC:</strong> VIVA College</li>
+            <li><strong>Diploma:</strong> I-Tech Computer Education</li>
+            <li><strong>Degree:</strong> St. John College of Engineering and Management</li>
+          </ul>
+        </div>
+
+        <div id="education" class="tab-content hidden">
+          <ul class="list-disc pl-5 space-y-2">
+            <li><strong>English:</strong> Advanced</li>
+            <li><strong>Marathi:</strong> Advanced</li>
+            <li><strong>Hindi:</strong> Advanced</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openTab(tabId, event) {
+      const contents = document.querySelectorAll(".tab-content");
+      const links = document.querySelectorAll(".tab-links");
+
+      contents.forEach(content => content.classList.add("hidden"));
+      document.getElementById(tabId).classList.remove("hidden");
+
+      links.forEach(link => {
+        link.classList.remove("active-tab", "text-cyan-600", "border-cyan-600", "border-b-2");
+      });
+      event.target.classList.add("active-tab", "text-cyan-600", "border-cyan-600", "border-b-2");
+    }
+  </script>
+
+        <section id="achievements" class="py-12 px-4 bg-gray-50 semantic-section">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-blue-700 mb-10">My Achievements</h2>
+            <div id="achievement-container"
+                class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8">
+                </div>
+        </section>
+
+        <section id="testimonials" class="py-12 px-4 bg-gray-100 semantic-section">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-blue-700 mb-10">What People Say</h2>
+            <div class="max-w-4xl mx-auto carousel w-full rounded-box shadow-lg">
+                <div id="item1" class="carousel-item w-full flex flex-col items-center p-8 bg-white">
+                    <img src="https://images.pexels.com/photos/13801841/pexels-photo-13801841.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        class="rounded-full w-24 h-24 object-cover mb-4 mask mask-squircle" alt="Client 1">
+                    <p class="text-lg text-gray-700 text-center italic mb-4">"Shubham is an exceptionally talented
+                        developer. His attention to detail and problem-solving skills are top-notch!"</p>
+                    <p class="font-semibold text-gray-800">- Jane Doe, CEO of Tech Solutions</p>
+                </div>
+                <div id="item2" class="carousel-item w-full flex flex-col items-center p-8 bg-white">
+                    <img src="https://images.pexels.com/photos/8040903/pexels-photo-8040903.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        class="rounded-full w-24 h-24 object-cover mb-4 mask mask-squircle" alt="Client 2">
+                    <p class="text-lg text-gray-700 text-center italic mb-4">"Working with Shubham was a pleasure. He
+                        delivered our project ahead of schedule and exceeded our expectations."</p>
+                    <p class="font-semibold text-gray-800">- John Smith, Project Manager</p>
+                </div>
+                <div id="item3" class="carousel-item w-full flex flex-col items-center p-8 bg-white">
+                    <img src="https://images.pexels.com/photos/30697742/pexels-photo-30697742/free-photo-of-stylish-woman-in-red-jacket-portrait.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        class="rounded-full w-24 h-24 object-cover mb-4 mask mask-squircle" alt="Client 3">
+                    <p class="text-lg text-gray-700 text-center italic mb-4">"His passion for technology is evident in
+                        his work. Highly recommend Shubham for any development needs!"</p>
+                    <p class="font-semibold text-gray-800">- Emily White, Startup Founder</p>
+                </div>
+            </div>
+            <div class="flex justify-center w-full py-2 gap-2">
+                <a href="#item1" class="btn btn-xs">1</a>
+                <a href="#item2" class="btn btn-xs">2</a>
+                <a href="#item3" class="btn btn-xs">3</a>
+            </div>
+        </section>
+
+        <section id="goals" class="py-12 px-4 bg-gradient-to-br from-blue-50 to-purple-100 semantic-section">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-blue-700 mb-10">My Future Goals</h2>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
+                </div>
+        </section>
+
+        <section id="personal-section" class="py-12 px-4 bg-gradient-to-br from-pink-100 to-blue-100 semantic-section">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-purple-800 mb-10">My Personal Side</h2>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card bg-white shadow-md hover:shadow-xl rounded-xl p-5">
+                    <img src="hobbies.webp" alt="Hobbies" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">My Hobbies</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li><strong>Coding:</strong> I enjoy building things and solving challenges.</li>
+                        <li><strong>Sketching:</strong> Helps me relax and express creativity.</li>
+                        <li><strong>Gaming:</strong> Boosts my reflexes and focus.</li>
+                        <li><strong>Reading:</strong> Enhances my knowledge and imagination.</li>
+                    </ul>
+                </div>
+
+                <div class="card bg-white shadow-md hover:shadow-xl rounded-xl p-5">
+                    <img src="drabj.webp" alt="Role Model" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">My Role Model</h3>
+                    <p class="text-gray-600">
+                        <strong>Dr. A.P.J. Abdul Kalam</strong> – A brilliant scientist and inspirational leader who
+                        rose from humble beginnings to become the President of India. His words and actions inspire me
+                        to dream big and stay humble.
+                    </p>
+                </div>
+
+                <div class="card bg-white shadow-md hover:shadow-xl rounded-xl p-5">
+                    <img src="favbook.jpg" alt="Favorite Book" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Favorite Book</h3>
+                    <p class="text-gray-600">
+                        <strong>“Atomic Habits” by James Clear</strong> – This book taught me how small changes in
+                        daily routine can lead to remarkable success over time.
+                    </p>
+                </div>
+
+                <div class="card bg-white shadow-md hover:shadow-xl rounded-xl p-5">
+                    <img src="greekofgreeks.webp" alt="Favorite Website" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Favorite Website</h3>
+                    <p class="text-gray-600">
+                        <strong>GeeksforGeeks</strong> – A great learning platform for coding, problem-solving, and
+                        technical interview preparation. I visit it daily!
+                    </p>
+                </div>
+
+                <div class="card bg-white shadow-md hover:shadow-xl rounded-xl p-5">
+                    <img src="spacex.jpg" alt="Favorite Startup" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Favorite Startup</h3>
+                    <p class="text-gray-600">
+                        <strong>SpaceX</strong> – Elon Musk’s innovative space company that inspires me to think beyond
+                        limits and explore impossible ideas.
+                    </p>
+                </div>
+
+                <div class="card bg-white shadow-md hover:shadow-xl rounded-xl p-5">
+                    <img src="ngo.webp" alt="Volunteering" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Volunteering Experience</h3>
+                    <p class="text-gray-600">
+                        I volunteered with a local NGO to teach underprivileged kids basic computer skills. It was a
+                        rewarding experience that made me more empathetic and socially aware.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="bg-gray-100 py-12 px-4 semantic-section">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-8">Contact Me</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <address class="space-y-6 text-lg text-gray-700">
+                        <div>
+                            <span class="font-semibold">📞 Phone:</span>
+                            <a href="tel:+91 9307168129" class="text-blue-600 hover:underline block">+91 9307168129</a>
+                        </div>
+                        <div>
+                            <span class="font-semibold">💬 WhatsApp:</span>
+                            <a href="https://wa.me/919307168129" target="_blank"
+                                class="text-green-600 hover:underline block">
+                                Click to Chat on WhatsApp
+                            </a>
+                        </div>
+                        <div>
+                            <span class="font-semibold">📧 Email:</span>
+                            <a href="mailto:123shubham7005@sjcem.edu.in"
+                                class="text-red-600 hover:underline block">
+                                123shubham7005@sjcem.edu.in
+                            </a>
+                        </div>
+                        <div>
+                            <span class="font-semibold">📍 Location:</span>
+                            <p>Vasai - Nallasopara, Maharashtra, India</p>
+                        </div>
+                    </address>
+                    <div class="w-full h-64 md:h-full">
+                        <iframe class="w-full h-full rounded-xl shadow-md"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.585579979708!2d72.827725814856!3d19.349692986950264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7a956d78272f7%3A0x6339d6b9d6a2f8c5!2sSt.%20John%20College%20Of%20Engineering%20and%20Management!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact-form"
+            class="bg-white py-10 px-6 rounded-xl shadow-md max-w-2xl mx-auto my-10 semantic-section">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Send Me a Message</h2>
+            <form action="https://formspree.io/f/xrbqdvow" method="POST" class="space-y-5 bg-white">
+                <div>
+                    <label for="name" class="block text-gray-700 font-medium mb-1">Name</label>
+                    <input type="text" name="name" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 bg-white" />
+                </div>
+                <div>
+                    <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+                    <input type="email" name="email" id="email" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 bg-white" />
+                </div>
+                <div>
+                    <label for="message" class="block text-gray-700 font-medium mb-1">Message</label>
+                    <textarea name="message" id="message" rows="5" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 bg-white"></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+                        Send
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer id="footer" class="bg-gray-900 text-white py-10 px-4">
+        <div class="max-w-5xl mx-auto text-center space-y-6">
+            <h3 class="text-2xl sm:text-3xl font-bold">Connect with Me</h3>
+            <p class="text-gray-300">Let's build something amazing together! Follow me on social platforms below.</p>
+            <div class="flex justify-center space-x-6 flex-wrap">
+                <a href="https://www.linkedin.com/in/shubham-chaugule-06b882321?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                    target="_blank">
+                    <img src="linkkdln.jpg" alt="LinkedIn"
+                        class="w-10 h-10 rounded-full hover:scale-110 transition-transform duration-200">
+                </a>
+                <a href="https://github.com/Shubham8679" target="_blank">
+                    <img src="github.png" alt="GitHub"
+                        class="w-10 h-10 rounded-full hover:scale-110 transition-transform duration-200">
+                </a>
+                <a href="https://twitter.com/" target="_blank">
+                    <img src="twitter.webp" alt="Twitter"
+                        class="w-10 h-10 rounded-full hover:scale-110 transition-transform duration-200">
+                </a>
+                <a href="https://instagram.com/shubham_chaugule69" target="_blank">
+                    <img src="instagram.jpg" alt="Instagram"
+                        class="w-10 h-10 rounded-full hover:scale-110 transition-transform duration-200">
+                </a>
+            </div>
+            <p class="text-sm text-gray-400">© 2025 Shubham Chaugule | All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        // Remove loader after page loads
+        window.addEventListener('load', () => {
+            document.getElementById('loader').style.display = 'none';
+        });
+
+        // Load JSON data and create achievement cards
+        fetch('achievements.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('achievement-container');
+                data.section.achievements.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'achievement-box bg-white rounded-xl shadow-md hover:shadow-xl transition p-4 text-center';
+                    card.innerHTML = `
+                        <img src="${item.image}" alt="${item.alt}" class="w-full h-40 object-cover rounded-lg mb-4" />
+                        <h3 class="text-xl font-semibold text-gray-800">${item.title}</h3>
+                        <p class="text-gray-600 mt-2">${item.description}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Error loading achievements:', error));
+
+        // Load and render goals from JSON - FIX APPLIED HERE
+        fetch('goals.json') // Corrected fetch to goals.json
+            .then(response => response.json())
+            .then(data => {
+                const goalsSection = document.querySelector('#goals .grid');
+                goalsSection.innerHTML = ''; // Clear static content if needed
+
+                data.section.goals.forEach(goal => {
+                    const goalBox = document.createElement('div');
+                    goalBox.className = 'goal-box bg-white rounded-xl shadow-md hover:shadow-xl transition p-4 text-center';
+                    goalBox.innerHTML = `
+                        <img src="${goal.image}" alt="${goal.alt}" class="w-full h-40 object-cover rounded-lg mb-4" />
+                        <h3 class="text-xl font-semibold text-gray-800">${goal.title}</h3>
+                        <p class="text-gray-600 mt-2">${goal.description}</p>
+                    `;
+                    goalsSection.appendChild(goalBox);
+                });
+            })
+            .catch(error => console.error('Error loading goals JSON:', error, 'Make sure goals.json exists and is correctly formatted.'));
+
+        // Form Script - Note: The original script was incomplete. This is a basic placeholder.
+        // For actual form submission, you'd handle the response from Formspree.
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                    form.reset();
+                } else {
+                    response.json().then(data => {
+                        if (Object.hasOwnProperty.call(data, 'errors')) {
+                            alert(data["errors"].map(error => error["message"]).join(", "));
+                        } else {
+                            alert('Oops! There was a problem submitting your form');
+                        }
+                    })
+                }
+            }).catch(error => {
+                alert('Oops! There was a problem submitting your form');
+            });
+        });
+    </script>
+</body>
+
+</html>
